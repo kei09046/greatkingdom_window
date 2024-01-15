@@ -7,12 +7,12 @@
 #include <string>
 
 
-const int batchSize = 512;
+static const int batchSize = 512;
 
 class NetImpl : public torch::nn::Module{
 public:
 	NetImpl(bool use_gpu);
-	std::pair<torch::Tensor, torch::Tensor> forward(const torch::Tensor& state);
+	std::tuple<torch::Tensor, torch::Tensor> forward(const torch::Tensor& state);
 	torch::nn::Conv2d cv1;
 	torch::nn::BatchNorm2d bn1;
 	torch::nn::Conv2d cv2;
@@ -31,13 +31,13 @@ public:
 
 	torch::Device device;
 };
-
 TORCH_MODULE(Net);
 
 class PolicyValueNet {
 private:
 	bool use_gpu;
 	float l2_const = 0.0001f;
+	std::array<float, totSize + 1> pvfn;
 	torch::optim::Adam* optimizer;
 
 public:

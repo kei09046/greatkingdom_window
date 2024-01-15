@@ -5,7 +5,7 @@
 #include <array>
 #include <set>
 
-const int Max = 1 << 16;
+static const int Max = 1 << 16;
 const int boardSize = 9;
 const int totSize = 81;
 const int largeSize = 121;
@@ -30,7 +30,9 @@ public:
 	const std::pair<int, int>& get_territory() const;
 	const std::vector<std::pair<int, int> >& get_seqence() const;
 	int get_turn() const;
-	bool legal(int cord) const;
+	//bool legal(int cord) const;
+	int get_n_available() const;
+	float terr_diff() const;
 
 private:
 	static void remove(std::vector<int>& v, int x);

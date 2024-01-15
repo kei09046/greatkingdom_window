@@ -118,7 +118,6 @@ void Memory::emplace_back(float delta, std::array<float, 7 * largeSize>&& _state
 
 std::array<PackedData, batchSize> Memory::sample()
 {
-	//cout << "sample";
 	std::array<PackedData, batchSize> ret;
 	float segment = static_cast<float>(sum_tree.total()) / batchSize;
 	beta = min(1.0f, beta + beta_increment_per_sampling);
@@ -127,14 +126,13 @@ std::array<PackedData, batchSize> Memory::sample()
 	for (int i = 0; i < batchSize; ++i) {
 		rd = get_random(segment * i, segment * (i + 1));
 		ret[i] = sum_tree.get(rd);
-		/*ret[i].diff = pow(sum_tree.n_elements * ret[i].diff / sum_tree.total(), -beta);
+		ret[i].diff = pow(sum_tree.n_elements * ret[i].diff / sum_tree.total(), -beta);
 		if (ret[i].diff > max)
-			max = ret[i].diff;*/
+			max = ret[i].diff;
 	}
 
-	//cout << "sample";
-	/*for (int i = 0; i < batchSize; ++i)
-		ret[i].diff /= max;*/
+	for (int i = 0; i < batchSize; ++i)
+		ret[i].diff /= max;
 
 	return ret;
 }

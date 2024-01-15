@@ -57,29 +57,34 @@ array<float, 7 * largeSize> GameManager::current_state() const{
 	array<float, 7 * largeSize> ret;
 	ret.fill(0.0f);
 	
-	int cnt = 0;
-	float c = static_cast<float>((territory.first - territory.second - penalty) * turn);
+	unsigned int cnt = 0;
+	float c = terr_diff();
 	for(int i= 0; i < boardSize + 2; ++i)
 		for (int j = 0; j < boardSize + 2; ++j) {
 			switch (turn * board[i][j]) {
 			case 1:
 				ret[cnt] = 1.0f;
+				ret[2 * largeSize + cnt] = 1.0f;
 				break;
 			case -1:
 				ret[largeSize + cnt] = 1.0f;
+				ret[3 * largeSize + cnt] = 1.0f;
 				break;
 			case Max:
-				ret[2 * largeSize + cnt] = 1.0f;
+				ret[4 * largeSize + cnt] = 1.0f;
 				break;
 			case -Max:
-				ret[2 * largeSize + cnt] = 1.0f;
+				ret[4 * largeSize + cnt] = 1.0f;
 				break;
 			default:
 				break;
 			}
 
+			if (!seq.empty()) {
+				ret[3 * largeSize + (seq.back().first + 1) * (boardSize + 2) + (seq.back().second + 1)] = 0.0f;
+			}
+
 			ret[5 * largeSize + cnt] = static_cast<float>(turn * terr_board[i][j]);
-			ret[4 * largeSize + cnt] = static_cast<float>(turn);
 			ret[6 * largeSize + cnt] = c;
 			cnt++;
 		}
@@ -430,8 +435,15 @@ const vector<pair<int, int> >& GameManager::get_seqence() const{
 	return this->seq;
 }
 
-bool GameManager::legal(int cord) const {
-	int x = cord / boardSize + 1;
-	int y = cord % boardSize + 1;
-	return (x >= boardSize + 1) || !(board[x][y] || terr_board[x][y]);
+//bool GameManager::legal(int cord) const {
+//	int x = cord / boardSize + 1;
+//	int y = cord % boardSize + 1;
+//	return (x >= boardSize + 1) || !(board[x][y] || terr_board[x][y]);
+//}
+
+int GameManager::get_n_available() const {
+	return available.size() - (terr_diff() < 0 && available.size() > 1);
+}
+float GameManager::terr_diff() const{
+	return static_cast<float>((territory.first - territory.second - penalty) * turn);
 }

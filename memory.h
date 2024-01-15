@@ -18,7 +18,7 @@ public:
 
 	GameData();
 	GameData(std::array<float, 7 * largeSize>& _state, std::array<float, totSize + 1>& _mcts_probs, 
-		float _winner, std::array<float, 7 * largeSize> &_next_state);
+		float _winner, std::array<float, 7 * largeSize>& _next_state );
 	GameData(std::array<float, 7 * largeSize>&& _state, std::array<float, totSize + 1>&& _mcts_probs, 
 		float _winner, std::array<float, 7 * largeSize>&& _next_state);
 };
@@ -58,7 +58,7 @@ public:
 	float ep = 0.01f;
 	float alpha = 0.6f;
 	float beta = 0.4f;
-	float beta_increment_per_sampling = 0.001f;
+	float beta_increment_per_sampling = 0.0f; // 0.001f
 	SumTree sum_tree;
 
 	Memory();
